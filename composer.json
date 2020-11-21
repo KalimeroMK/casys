@@ -1,0 +1,28 @@
+{
+    "name": "kalimeromk/casys-laravel",
+    "description": "Integration of casys payment method",
+    "require": {
+        "php": ">=7"
+    },
+    "keywords": ["laravel", "casys"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zoran Shefot Bogoevski",
+            "email": "zbogoevski@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Kalimero\\Casys\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Kalimero\\Casys\\CasysServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
