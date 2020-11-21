@@ -35,7 +35,6 @@ class CasysController extends Controller
     }
 
     /** paymentOKURL
-     * Store a newly created resource in storage.
      *
      * @return Application|Factory|View
      */
@@ -45,7 +44,6 @@ class CasysController extends Controller
     }
 
     /** paymentFailURL
-     * Remove the specified resource from storage.
      * @return Application|Factory|View
      */
     public function fail()
