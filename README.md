@@ -26,17 +26,17 @@ Add routes manually
 
 use App\Http\Controllers\CasysController;
 
-Route::get('paymentLoader', [CasysController::class, 'index'])->name('loader');
-Route::post('payment', [CasysController::class, 'getCasys'])->name('validateAndPay');
-Route::post('paymentOKURL', [CasysController::class, 'success'])->name('paymentOKURL');
-Route::post('paymentFailURL', [CasysController::class, 'fail'])->name('paymentFailURL');
+`Route::get('paymentLoader', [CasysController::class, 'index'])->name('loader');`
+`Route::post('payment', [CasysController::class, 'getCasys'])->name('validateAndPay');`
+`Route::post('paymentOKURL', [CasysController::class, 'success'])->name('paymentOKURL');`
+`Route::post('paymentFailURL', [CasysController::class, 'fail'])->name('paymentFailURL');`
 
 **NOTE:** *This is only needed in Laravel <=7*
 
-Route::get('paymentLoader', 'CasysController@index')->name('loader');
-Route::post('payment', 'CasysController@getCasys')->name('validateAndPay');
-Route::post('paymentOKURL', 'CasysController@success')->name('paymentOKURL');
-Route::post('paymentFailURL', 'CasysController@fail')->name('paymentFailURL');
+`Route::get('paymentLoader', 'CasysController@index')->name('loader');`
+`Route::post('payment', 'CasysController@getCasys')->name('validateAndPay');`
+`Route::post('paymentOKURL', 'CasysController@success')->name('paymentOKURL');`
+`Route::post('paymentFailURL', 'CasysController@fail')->name('paymentFailURL');`
 
 
 ## Info
