@@ -16,27 +16,27 @@ After updating composer you need to run :
 
 You need to publish the files for this package. This will add the files 
 
-`config/casys.php`,
-`app/Http/Controllers/CasysController.php`,
-`app/Traits/Casys.php`,
-`resources/views/vendor/casys`
+`config/casys.php`,<br />
+`app/Http/Controllers/CasysController.php`,<br />
+`app/Traits/Casys.php`,<br />
+`resources/views/vendor/casys`<br />
 
 Add routes manually
 ### Laravel 
 
 use App\Http\Controllers\CasysController;
 
-`Route::get('paymentLoader', [CasysController::class, 'index'])->name('loader');`
-`Route::post('payment', [CasysController::class, 'getCasys'])->name('validateAndPay');`
-`Route::post('paymentOKURL', [CasysController::class, 'success'])->name('paymentOKURL');`
-`Route::post('paymentFailURL', [CasysController::class, 'fail'])->name('paymentFailURL');`
+`Route::get('paymentLoader', [CasysController::class, 'index'])->name('loader');`<br />
+`Route::post('payment', [CasysController::class, 'getCasys'])->name('validateAndPay');`<br />
+`Route::post('paymentOKURL', [CasysController::class, 'success'])->name('paymentOKURL');`<br />
+`Route::post('paymentFailURL', [CasysController::class, 'fail'])->name('paymentFailURL');`<br />
 
 **NOTE:** *This is only needed in Laravel <=7*
 
-`Route::get('paymentLoader', 'CasysController@index')->name('loader');`
-`Route::post('payment', 'CasysController@getCasys')->name('validateAndPay');`
-`Route::post('paymentOKURL', 'CasysController@success')->name('paymentOKURL');`
-`Route::post('paymentFailURL', 'CasysController@fail')->name('paymentFailURL');`
+`Route::get('paymentLoader', 'CasysController@index')->name('loader');`<br />
+`Route::post('payment', 'CasysController@getCasys')->name('validateAndPay');`<br />
+`Route::post('paymentOKURL', 'CasysController@success')->name('paymentOKURL');`<br />
+`Route::post('paymentFailURL', 'CasysController@fail')->name('paymentFailURL');`<br />
 
 
 ## Info
