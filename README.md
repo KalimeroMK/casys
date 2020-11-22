@@ -14,7 +14,7 @@ After updating composer you need to run :
 
     $ php artisan vendor:publish --provider="Kalimero\Casys\CasysServiceProvider"
 
-You need to publish the files for this package. This will add the files 
+It will publish the files from this package it will add this files 
 
 `config/casys.php`,<br />
 `app/Http/Controllers/CasysController.php`,<br />
@@ -24,7 +24,7 @@ You need to publish the files for this package. This will add the files
 Add routes manually
 ### Laravel 
 
-use App\Http\Controllers\CasysController;
+`use App\Http\Controllers\CasysController;`<br/>
 
 `Route::get('paymentLoader', [CasysController::class, 'index'])->name('loader');`<br />
 `Route::post('payment', [CasysController::class, 'getCasys'])->name('validateAndPay');`<br />
@@ -39,8 +39,12 @@ use App\Http\Controllers\CasysController;
 `Route::post('paymentFailURL', 'CasysController@fail')->name('paymentFailURL');`<br />
 
 
+## how to use 
+
+Only need to pass amount and client data to the method in controller 
+
 ## Info
 
-This package is still very alpha.
+This package is still very alpha and it is not created as a proper package so it can be easy updated to feed you needs 
 
     - Suggestions are welcome :)

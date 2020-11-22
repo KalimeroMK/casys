@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('layouts.app')
 @section('content')
     <section class="page-section">
         <div class="container-fluid">
@@ -18,7 +18,7 @@
         </div>
         <script>
             setTimeout(function () {
-                parent.document.location.href = 'https://www.hotelvlaho.com/'; // the redirect goes here
+                parent.document.location.href = 'add redirect url hire'; // the redirect goes here
             }, 3000); // 5 seconds
         </script>
     </section>
