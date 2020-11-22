@@ -40,8 +40,17 @@ Add routes manually
 
 
 ## how to use 
+ 
+Add you credentionals in .env file like this 
 
-Only need to pass amount and client data to the method in controller 
+PAY_TO_MERCHANT = 
+MERCHANT_NAME =
+AMOUNT_CURRENCY = MKD
+PAYMENT_OK_URL =
+PAYMENT_FAIL_URL =
+CASYS_TOKEN =
+
+and now only need to pass amount and client data to the method in controller 
 
 ## Info
 

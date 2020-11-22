@@ -1,5 +1,13 @@
 <?php
-
+/*
+    |--------------------------------------------------------------------------
+    | Authentication Defaults
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default authentication 
+    | for Cpay  integration in  your application. You may change these defaults as required.
+    |
+    */
 return [
     'PayToMerchant' => env('PAY_TO_MERCHANT'),
     'MerchantName' => env('MERCHANT_NAME'),
