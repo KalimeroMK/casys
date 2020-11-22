@@ -14,6 +14,6 @@ return [
     'AmountCurrency' => env('AMOUNT_CURRENCY', 'MKD'),
     'PaymentOKURL' => env('PAYMENT_OK_URL', 'paymentOKURL'),
     'PaymentFailURL' => env('PAYMENT_FAIL_URL', 'paymentFailURL'),
-    'Password' => env('CASYS_TOKEN', 'TEST_TEST')
+    'Password' => env('CASYS_TOKEN', 'TEST_PASS')
 
 ];
