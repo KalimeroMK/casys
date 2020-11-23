@@ -20,9 +20,12 @@ It will publish the files from this package it will add this files
 `app/Http/Controllers/CasysController.php`,<br />
 `app/Traits/Casys.php`,<br />
 `resources/views/vendor/casys`<br />
+`routes/casys.php`<br />
 
-Add routes manually
+
 ### Laravel 
+
+Register route file in RouteServiceProvider or do it loca;y
 
 `use App\Http\Controllers\CasysController;`<br/>
 
