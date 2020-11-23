@@ -25,7 +25,7 @@ It will publish the files from this package it will add this files
 
 ### Laravel 
 
-Register route file in RouteServiceProvider or do it loca;y
+Register route file in RouteServiceProvider or add this routes to existing root file
 
 `use App\Http\Controllers\CasysController;`<br/>
 
@@ -54,6 +54,8 @@ PAYMENT_FAIL_URL =
 CASYS_TOKEN =
 
 and now only need to pass amount and client data to the method in controller 
+
+Views at the moment are coming form the package if you want to use the published one jus edit the controller 
 
 ## Info
 
