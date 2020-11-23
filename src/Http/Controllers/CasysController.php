@@ -17,7 +17,7 @@ class CasysController extends Controller
      */
     public function index()
     {
-        return view('casys.loader');
+        return view('casys:loader');
     }
 
     /**
