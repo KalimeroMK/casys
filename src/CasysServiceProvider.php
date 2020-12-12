@@ -21,7 +21,7 @@ class CasysServiceProvider extends ServiceProvider
             __DIR__ . '/resources/views' => resource_path('views/vendor/casys'),
             __DIR__ . '/config/casys.php' => config_path('/casys.php'),
             __DIR__ . '/Http/Controllers/CasysController.php' => app_path('/Http/Controllers/CasysController.php'),
-            __DIR__ . '/Traits/Casys.php' => app_path('/Traits/Casys.php'),
+            __DIR__ . '/Http/Helper/Casys.php' => app_path('/Http/Helper/Casys.php'),
             __DIR__ . '/routes/casys.php' => app_path('/../routes/casys.php'),
 
         ]);

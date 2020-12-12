@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\Casys;
+use App\Http\Controllers\Helper\Casys;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -10,7 +10,13 @@ use Illuminate\Contracts\View\View;
 
 class CasysController extends Controller
 {
-    use Casys;
+
+    private Casys $casys;
+
+    public function __construct()
+    {
+        $this->casys = new Casys();
+    }
 
     /**
      * @return Application|Factory|View
@@ -49,6 +55,11 @@ class CasysController extends Controller
     public function fail()
     {
         return view('casys::failurl')->with('success', 'You transaction was successful');
+    }
+
+    protected function getCasysData($client, $amount): array
+    {
+        return $this->casys->getCasysData($client, $amount);
     }
 
 }

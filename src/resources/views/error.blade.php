@@ -9,7 +9,7 @@
                         <div class="card-body text-center">
                             <h1 class="my-3">
                                 <i class="fa fa-check-circle"></i>
-                                <div class="alert-danger">@lang('validation.casys')</div>
+                                <div class="alert-danger">Payment error</div>
                             </h1>
                         </div>
                     </div>

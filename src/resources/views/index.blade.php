@@ -6,14 +6,14 @@
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <div class="card">
-                        <div class="card-header">{{ __('Hotel Vlaho payment system') }}</div>
+                        <div class="card-header">Payment system</div>
                         <div class="card-body p-0">
                             <form
-                                action="https://www.cpay.com.mk/client/Page/default.aspx?xml_id=/.loginToPay/.simple/"
-                                method="POST"
-                                id="cPayForm"
-                                name="cPayForm"
-                                target="cPayFrame"
+                                    action="https://www.cpay.com.mk/client/Page/default.aspx?xml_id=/.loginToPay/.simple/"
+                                    method="POST"
+                                    id="cPayForm"
+                                    name="cPayForm"
+                                    target="cPayFrame"
                             >
                                 @foreach ($casys['required'] as $key => $value)
                                     <input id="{{ $key }}" name="{{ $key }}" value="{{ $value }}" type="hidden"/>
@@ -28,10 +28,10 @@
                             </form>
                             <div class="embed-responsive w-100" style="min-height: 545px">
                                 <iframe
-                                    class="embed-responsive-item"
-                                    src="{{ route('loader') }}"
-                                    name="cPayFrame"
-                                    id="cPayFrame">
+                                        class="embed-responsive-item"
+                                        src="{{ route('loader') }}"
+                                        name="cPayFrame"
+                                        id="cPayFrame">
                                 </iframe>
                             </div>
                         </div>
