@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="187e3c70-65a9-4856-bf6e-9ff9666e9549" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.phpunit.result.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/phpunit.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Http/Helper/Casys.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/casys.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/casys.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/laravel-idea.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/laravel-idea.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CasysServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/CasysServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Http/Controllers/CasysController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Http/Controllers/CasysController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Traits/Casys.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/views/error.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/views/error.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/views/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/views/index.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +158,7 @@
       <workItem from="1607790870161" duration="178000" />
       <workItem from="1607791068909" duration="193000" />
       <workItem from="1607791272551" duration="2313000" />
-      <workItem from="1607798940103" duration="8535000" />
+      <workItem from="1607798940103" duration="8627000" />
     </task>
     <servers />
   </component>
