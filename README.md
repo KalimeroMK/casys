@@ -3,9 +3,11 @@
 
 This is a package to integrate Casys payment gateway in laravel it generates complete scaffolding for simple integration. It create:<br>
 ## Views <br>
+--resources/view/vendor/casys<br>
 ## Controller<br>
+--/Http/Controllers/CasysController<br>
 ## Aditional class
-
+--/Http/Helper/Casys.php
 Casys, Macedonia payment card processor 
 
 ## Installation
