@@ -4,8 +4,8 @@
 namespace App\Http\Helper;
 
 
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class Casys
 {
@@ -26,7 +26,10 @@ class Casys
             'OriginalCurrency' => config('casys.AmountCurrency'),
         ];
 
-        $this->validation($required);
+        try {
+            $this->validation($required);
+        } catch (ValidationException $e) {
+        }
 
         $user = [
             'FirstName' => $client->name,
@@ -34,7 +37,10 @@ class Casys
             'Country' => $client->country,
             'Email' => $client->email,
         ];
-        $this->validationUser($user);
+        try {
+            $this->validationUser($user);
+        } catch (ValidationException $e) {
+        }
 
         $checkSumHeaderParams = config('casys.Password');
         $checkSum = md5($checkSumHeaderParams);
@@ -50,11 +56,12 @@ class Casys
 
     /**
      * @param $required
-     * @return RedirectResponse
+     * @return array
+     * @throws ValidationException
      */
-    public function validation($required)
+    public function validation($required): array
     {
-        $errors = Validator::make($required, [
+        return Validator::make($required, [
             'AmountToPay' => 'required|integer',
             'PayToMerchant' => 'required|integer',
             'MerchantName' => 'required|string|max:255',
@@ -66,30 +73,26 @@ class Casys
             'OriginalAmount' => 'required|integer',
             'OriginalCurrency' => 'required|string|max:255'
 
-        ]);
+        ])->validate();
 
-        if ($errors->fails()) {
-            return redirect()->back()->withErrors($errors);
-        }
     }
 
     /**
      * @param $user
-     * @return RedirectResponse
+     * @return array
+     * @throws ValidationException
      */
-    public function validationUser($user)
+    public function validationUser($user): array
     {
-        $errors = Validator::make($user, [
+        return Validator::make($user, [
             'FirstName' => 'required|string|max:255',
             'LastName' => 'required|string|max:255',
             'Country' => 'required|string|max:255',
             'Email' => 'required|email'
 
-        ]);
+        ])->validate();
 
-        if ($errors->fails()) {
-            return redirect()->back()->withErrors($errors);
-        }
+
     }
 
 }
