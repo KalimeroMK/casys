@@ -6,10 +6,8 @@ This is a package to integrate Casys payment gateway in laravel it generates com
 --resources/view/vendor/casys<br>
 ## Controller<br>
 --/Http/Controllers/CasysController<br>
-## Aditional class
---/Http/Helper/Casys.php
-Casys, Macedonia payment card processor 
-
+## Aditional class<br>
+--/Http/Helper/Casys.php<br>
 ## Installation
 
 Require this package in your composer.json `"kalimeromk/casys-laravel": "9999999-dev"`,
