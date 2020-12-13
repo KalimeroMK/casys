@@ -26,10 +26,8 @@ class Casys
             'OriginalCurrency' => config('casys.AmountCurrency'),
         ];
 
-        try {
-            $this->validation($required);
-        } catch (ValidationException $e) {
-        }
+        $this->validation($required);
+
 
         $user = [
             'FirstName' => $client->name,
@@ -37,15 +35,12 @@ class Casys
             'Country' => $client->country,
             'Email' => $client->email,
         ];
-        try {
-            $this->validationUser($user);
-        } catch (ValidationException $e) {
-        }
+        $this->validationUser($user);
 
         $checkSumHeaderParams = config('casys.Password');
         $checkSum = md5($checkSumHeaderParams);
-        $CheckSumHeader = "AmountToPay,PayToMerchant,MerchantName,AmountCurrency,Details1,Details2,PaymentOKURL,PaymentFailURL,FirstName,LastName,Email,OriginalAmount,OriginalCurrency" . $required['AmountToPay'] . $required['PayToMerchant'] . $required['MerchantName'] . $required['AmountCurrency'] . $required['Details1'] . $required['Details2'] . $required['PaymentOKURL'] . $required['PaymentFailURL'] . $required['FirstName'] . $required['LastName'] . $required['Email'] . $required['OriginalAmount'];
-        $checkSumHeader = $CheckSumHeader . $required['AmountToPay'] . $required['PayToMerchant'] . $required['MerchantName'] . $required['AmountCurrency'] . $required['Details1'] . $required['Details2'] . $required['PaymentOKURL'] . $required['PaymentFailURL'] . $required['FirstName'] . $required['LastName'] . $required['Email'] . $required['OriginalAmount'] . $checkSum;
+        $CheckSumHeader = "AmountToPay,PayToMerchant,MerchantName,AmountCurrency,Details1,Details2,PaymentOKURL,PaymentFailURL,FirstName,LastName,Email,OriginalAmount,OriginalCurrency" . $required['AmountToPay'] . $required['PayToMerchant'] . $required['MerchantName'] . $required['AmountCurrency'] . $required['Details1'] . $required['Details2'] . $required['PaymentOKURL'] . $required['PaymentFailURL'] . $user['FirstName'] . $user['LastName'] . $user['Email'] . $user['Country'] . $required['OriginalAmount'];
+        $checkSumHeader = $CheckSumHeader . $required['AmountToPay'] . $required['PayToMerchant'] . $required['MerchantName'] . $required['AmountCurrency'] . $required['Details1'] . $required['Details2'] . $required['PaymentOKURL'] . $required['PaymentFailURL'] . $user['FirstName'] . $user['LastName'] . $user['Email'] . $user['Country'] . $required['OriginalAmount'] . $checkSum;
         return [
             'checkSum' => $checkSum,
             'required' => $required,
