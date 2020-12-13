@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Helper\Casys;
+use App\Http\Helper\Casys;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -23,7 +23,7 @@ class CasysController extends Controller
      */
     public function index()
     {
-        return view('casys:loader');
+        return view('casys::loader');
     }
 
     /**
@@ -33,11 +33,8 @@ class CasysController extends Controller
      */
     protected function getCasys($client, $amount)
     {
-        return view('casys::index')->with(
-            [
-                'casys' => $this->getCasysData($client, $amount)
-            ]
-        );
+        $casys = $this->getCasysData($client, $amount);
+        return view('casys::index', compact('casys'));
     }
 
     /** paymentOKURL

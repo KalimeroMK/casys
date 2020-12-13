@@ -1,9 +1,10 @@
 <?php
 
 
-namespace App\Http\Controllers\Helper;
+namespace App\Http\Helper;
 
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 
 class Casys
@@ -11,10 +12,7 @@ class Casys
 
     public function getCasysData($client, $amount): array
     {
-        // casys settings
-        $user = $length = [];
 
-        // required fields
         $required = [
             'AmountToPay' => (round($amount) > 0) ? (round($amount) * 100) : '',
             'PayToMerchant' => config('casys.PayToMerchant'),
@@ -23,56 +21,38 @@ class Casys
             'Details1' => $amount,
             'Details2' => 'Price ' . round($amount) . config('casys.AmountCurrency'),
             'PaymentOKURL' => config('casys.PaymentOKURL'),
-            'PaymentFailURL' => config('casys.PaymentFailURL')
+            'PaymentFailURL' => config('casys.PaymentFailURL'),
+            'OriginalAmount' => round($amount),
+            'OriginalCurrency' => config('casys.AmountCurrency'),
         ];
 
         $this->validation($required);
 
-        // additional fields
-        $additionalFields = [
+        $user = [
             'FirstName' => $client->name,
             'LastName' => $client->last_name,
             'Country' => $client->country,
             'Email' => $client->email,
-            'OriginalAmount' => round($amount),
-            'OriginalCurrency' => config('casys.AmountCurrency'),
         ];
-        $this->validationUser($additionalFields);
+        $this->validationUser($user);
 
-
-        // START Generate CheckSum
-        $checkSumHeader = count($required) + count($user);
-        foreach ($required as $key => $value) {
-            $checkSumHeader .= $key . ',';
-        }
-        foreach ($user as $key => $value) {
-            $checkSumHeader .= $key . ',';
-        }
-        foreach ($required as $key => $value) {
-            $checkSumHeader .= $length[$key];
-        }
-        foreach ($user as $key => $value) {
-            $checkSumHeader .= $length[$key];
-        }
-        $checkSumHeaderParams = $checkSumHeader;
-        foreach ($required as $key => $value) {
-            $checkSumHeaderParams .= $value;
-        }
-        foreach ($user as $key => $value) {
-            $checkSumHeaderParams .= $value;
-        }
-        $checkSumHeaderParams .= config('casys.Password');
-        $md5 = md5($checkSumHeaderParams);
-        // END Generate CheckSum
+        $checkSumHeaderParams = config('casys.Password');
+        $checkSum = md5($checkSumHeaderParams);
+        $CheckSumHeader = "AmountToPay,PayToMerchant,MerchantName,AmountCurrency,Details1,Details2,PaymentOKURL,PaymentFailURL,FirstName,LastName,Email,OriginalAmount,OriginalCurrency" . $required['AmountToPay'] . $required['PayToMerchant'] . $required['MerchantName'] . $required['AmountCurrency'] . $required['Details1'] . $required['Details2'] . $required['PaymentOKURL'] . $required['PaymentFailURL'] . $required['FirstName'] . $required['LastName'] . $required['Email'] . $required['OriginalAmount'];
+        $checkSumHeader = $CheckSumHeader . $required['AmountToPay'] . $required['PayToMerchant'] . $required['MerchantName'] . $required['AmountCurrency'] . $required['Details1'] . $required['Details2'] . $required['PaymentOKURL'] . $required['PaymentFailURL'] . $required['FirstName'] . $required['LastName'] . $required['Email'] . $required['OriginalAmount'] . $checkSum;
         return [
-            'checkSum' => $md5,
+            'checkSum' => $checkSum,
             'required' => $required,
+            'user' => $user,
             'checkSumHeader' => $checkSumHeader,
-            'fields' => $additionalFields
         ];
     }
 
-    public function validation($required): \Illuminate\Http\RedirectResponse
+    /**
+     * @param $required
+     * @return RedirectResponse
+     */
+    public function validation($required)
     {
         $errors = Validator::make($required, [
             'AmountToPay' => 'required|integer',
@@ -83,6 +63,8 @@ class Casys
             'Details2' => 'required|string|max:255',
             'PaymentOKURL' => 'required|string|max:255',
             'PaymentFailURL' => 'required|string|max:255',
+            'OriginalAmount' => 'required|integer',
+            'OriginalCurrency' => 'required|string|max:255'
 
         ]);
 
@@ -91,15 +73,17 @@ class Casys
         }
     }
 
-    public function validationUser($additionalFields): \Illuminate\Http\RedirectResponse
+    /**
+     * @param $user
+     * @return RedirectResponse
+     */
+    public function validationUser($user)
     {
-        $errors = Validator::make($additionalFields, [
+        $errors = Validator::make($user, [
             'FirstName' => 'required|string|max:255',
             'LastName' => 'required|string|max:255',
             'Country' => 'required|string|max:255',
-            'Email' => 'required|email',
-            'OriginalAmount' => 'required|integer',
-            'OriginalCurrency' => 'required|string|max:255'
+            'Email' => 'required|email'
 
         ]);
 
