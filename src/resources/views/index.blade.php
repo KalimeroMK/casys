@@ -22,6 +22,8 @@
                                 <input id="MerchantName" name="MerchantName"
                                        value="{{ $casys['required']['MerchantName'] }}"
                                        type="hidden"/>
+                                <input id="AmountToPay" name="AmountToPay"
+                                       value="{{ $casys['required']['AmountToPay'] }}" type="hidden"/>
                                 <input id="AmountCurrency" name="AmountCurrency" value="MKD" type="hidden"/>
                                 <input id="Details1" name="Details1" value="{{ $casys['required']['Details1'] }}"
                                        type="hidden"/>
