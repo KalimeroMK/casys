@@ -12,22 +12,28 @@ class Casys
 
     public function getCasysData($client, $amount): array
     {
+        $length = [];
 
         $required = [
             'AmountToPay' => (round($amount) > 0) ? (round($amount) * 100) : '',
             'PayToMerchant' => config('casys.PayToMerchant'),
             'MerchantName' => config('casys.MerchantName'),
             'AmountCurrency' => config('casys.AmountCurrency'),
-            'Details1' => $amount,
-            'Details2' => 'Price ' . round($amount) . config('casys.AmountCurrency'),
+            'Details1' => $price,
+            'Details2' => 'Price '.round($amount).config('casys.AmountCurrency'),
             'PaymentOKURL' => config('casys.PaymentOKURL'),
             'PaymentFailURL' => config('casys.PaymentFailURL'),
             'OriginalAmount' => round($amount),
             'OriginalCurrency' => config('casys.AmountCurrency'),
         ];
 
-        $this->validation($required);
-
+        try {
+            $this->validation($required);
+        } catch (ValidationException $e) {
+        }
+        foreach ($required as $key => $value) {
+            $length[$key] = sprintf('%03d', mb_strlen($value, 'UTF-8'));
+        }
 
         $user = [
             'FirstName' => $client->name,
@@ -35,14 +41,42 @@ class Casys
             'Country' => $client->country,
             'Email' => $client->email,
         ];
-        $this->validationUser($user);
+        try {
+            $this->validationUser($user);
+        } catch (ValidationException $e) {
+        }
+        // validate $additionalFields
+        foreach ($user as $key => $value) {
+            $user[$key] = $value;
+            $length[$key] = sprintf('%03d', mb_strlen($value, 'UTF-8'));
+        }
+        // START Generate CheckSum
+        $checkSumHeader = count($required) + count($user);
+        foreach ($required as $key => $value) {
+            $checkSumHeader .= $key.',';
+        }
+        foreach ($user as $key => $value) {
+            $checkSumHeader .= $key.',';
+        }
+        foreach ($required as $key => $value) {
+            $checkSumHeader .= $length[$key];
+        }
+        foreach ($user as $key => $value) {
+            $checkSumHeader .= $length[$key];
+        }
+        $checkSumHeaderParams = $checkSumHeader;
+        foreach ($required as $key => $value) {
+            $checkSumHeaderParams .= $value;
+        }
+        foreach ($user as $key => $value) {
+            $checkSumHeaderParams .= $value;
+        }
+        $checkSumHeaderParams .= config('casys.Password');
+        $md5 = md5($checkSumHeaderParams);
+        // END Generate CheckSum
 
-        $checkSumHeaderParams = config('casys.Password');
-        $checkSum = md5($checkSumHeaderParams);
-        $CheckSumHeader = "AmountToPay,PayToMerchant,MerchantName,AmountCurrency,Details1,Details2,PaymentOKURL,PaymentFailURL,FirstName,LastName,Email,OriginalAmount,OriginalCurrency" . $required['AmountToPay'] . $required['PayToMerchant'] . $required['MerchantName'] . $required['AmountCurrency'] . $required['Details1'] . $required['Details2'] . $required['PaymentOKURL'] . $required['PaymentFailURL'] . $user['FirstName'] . $user['LastName'] . $user['Email'] . $user['Country'] . $required['OriginalAmount'];
-        $checkSumHeader = $CheckSumHeader . $required['AmountToPay'] . $required['PayToMerchant'] . $required['MerchantName'] . $required['AmountCurrency'] . $required['Details1'] . $required['Details2'] . $required['PaymentOKURL'] . $required['PaymentFailURL'] . $user['FirstName'] . $user['LastName'] . $user['Email'] . $user['Country'] . $required['OriginalAmount'] . $checkSum;
         return [
-            'checkSum' => $checkSum,
+            'checkSum' => $md5,
             'required' => $required,
             'user' => $user,
             'checkSumHeader' => $checkSumHeader,
