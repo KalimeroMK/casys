@@ -49,12 +49,12 @@ Register route file in RouteServiceProvider or add this routes to existing root 
  
 Add you credentionals in .env file like this 
 
-PAY_TO_MERCHANT = <br>
-MERCHANT_NAME = <br>
-AMOUNT_CURRENCY = MKD <br>
-PAYMENT_OK_URL = <br>
-PAYMENT_FAIL_URL = <br>
-CASYS_TOKEN = <br>
+PAY_TO_MERCHANT= <br>
+MERCHANT_NAME= <br>
+AMOUNT_CURRENCY=MKD <br>
+PAYMENT_OK_URL= <br>
+PAYMENT_FAIL_URL= <br>
+CASYS_TOKEN= <br>
 
 and now only need to pass amount and client data to the method in controller 
 
