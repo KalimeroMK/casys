@@ -44,7 +44,7 @@ class CasysServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->mergeConfigFrom(__DIR__.'/config/casys.php.php', 'casys');
+        $this->mergeConfigFrom(__DIR__.'/config/casys.php', 'casys');
     }
 
 }
