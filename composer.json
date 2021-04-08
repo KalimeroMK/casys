@@ -2,8 +2,9 @@
   "name": "kalimeromk/casys-laravel",
   "description": "Integration of casys payment method",
   "require": {
-    "php": "^7.3|^8.0"
-  },
+    "php": "^7.4|^8.0",
+    "ext-json": "*"
+    },
   "keywords": [
     "laravel",
     "casys"
@@ -17,7 +18,8 @@
   ],
   "autoload": {
     "psr-4": {
-      "Kalimero\\Casys\\": "src/"
+      "Kalimero\\Casys\\": "src/",
+      "Kalimero\\Casys\\Tests\\": "tests/"
     }
   },
   "extra": {

@@ -11,7 +11,8 @@
 |
 */
 
-use App\Http\Controllers\CasysController;
+use Illuminate\Support\Facades\Route;
+use Kalimero\Casys\Http\Controllers\CasysController;
 
 Route::get('paymentLoader', [CasysController::class, 'index'])->name('loader');
 Route::post('payment', [CasysController::class, 'getCasys'])->name('validateAndPay');

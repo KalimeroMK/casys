@@ -1,11 +1,12 @@
 <?php
 
 
-namespace App\Http\Helper;
+namespace Kalimero\Casys\Http\Helper;
 
 
+use Exception;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 class Casys
 {
@@ -19,7 +20,7 @@ class Casys
             'PayToMerchant' => config('casys.PayToMerchant'),
             'MerchantName' => config('casys.MerchantName'),
             'AmountCurrency' => config('casys.AmountCurrency'),
-            'Details1' => $price,
+            'Details1' => Str::random(12),
             'Details2' => 'Price '.round($amount).config('casys.AmountCurrency'),
             'PaymentOKURL' => config('casys.PaymentOKURL'),
             'PaymentFailURL' => config('casys.PaymentFailURL'),
@@ -29,10 +30,7 @@ class Casys
 
         try {
             $this->validation($required);
-        } catch (ValidationException $e) {
-        }
-        foreach ($required as $key => $value) {
-            $length[$key] = sprintf('%03d', mb_strlen($value, 'UTF-8'));
+        } catch (Exception $exception) {
         }
 
         $user = [
@@ -43,13 +41,9 @@ class Casys
         ];
         try {
             $this->validationUser($user);
-        } catch (ValidationException $e) {
+        } catch (Exception $exception) {
         }
-        // validate $additionalFields
-        foreach ($user as $key => $value) {
-            $user[$key] = $value;
-            $length[$key] = sprintf('%03d', mb_strlen($value, 'UTF-8'));
-        }
+
         // START Generate CheckSum
         $checkSumHeader = count($required) + count($user);
         foreach ($required as $key => $value) {
@@ -71,12 +65,11 @@ class Casys
         foreach ($user as $key => $value) {
             $checkSumHeaderParams .= $value;
         }
-        $checkSumHeaderParams .= config('casys.Password');
-        $md5 = md5($checkSumHeaderParams);
+        $checkSumHeaderParams .= md5(config('casys.Password'));
         // END Generate CheckSum
 
         return [
-            'checkSum' => $md5,
+            'checkSum' => $checkSumHeaderParams,
             'required' => $required,
             'user' => $user,
             'checkSumHeader' => $checkSumHeader,
@@ -86,7 +79,7 @@ class Casys
     /**
      * @param $required
      * @return array
-     * @throws ValidationException
+     * @throws exception
      */
     public function validation($required): array
     {
@@ -101,15 +94,13 @@ class Casys
             'PaymentFailURL' => 'required|string|max:255',
             'OriginalAmount' => 'required|integer',
             'OriginalCurrency' => 'required|string|max:255'
-
         ])->validate();
-
     }
 
     /**
      * @param $user
      * @return array
-     * @throws ValidationException
+     * @throws exception
      */
     public function validationUser($user): array
     {
@@ -120,8 +111,5 @@ class Casys
             'Email' => 'required|email'
 
         ])->validate();
-
-
     }
-
 }

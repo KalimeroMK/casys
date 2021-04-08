@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Kalimero\Casys\Http\Controllers;
 
-use App\Http\Helper\Casys;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Routing\Controller;
+use Kalimero\Casys\Http\Helper\Casys;
 
 
 class CasysController extends Controller
