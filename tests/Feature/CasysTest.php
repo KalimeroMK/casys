@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature;
+namespace Kalimero\Casys\Tests\Feature;
 
 use Orchestra\Testbench\TestCase;
 
