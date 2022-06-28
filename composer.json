@@ -22,11 +22,26 @@
       "Kalimero\\Casys\\Tests\\": "tests/"
     }
   },
+  "scripts": {
+    "post-autoload-dump": [
+      "@php ./vendor/bin/testbench package:discover --ansi"
+    ],
+    "test": "vendor/bin/phpunit"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Kalimero\\Casys\\Tests\\": "tests/"
+    }
+  },
   "extra": {
     "laravel": {
       "providers": [
         "Kalimero\\Casys\\CasysServiceProvider"
       ]
     }
+  },
+  "require-dev": {
+    "orchestra/testbench": "^5.0|^6.0|^7.0",
+    "mockery/mockery": "^1.4|^1.5"
   }
 }
