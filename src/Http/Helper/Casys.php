@@ -1,89 +1,74 @@
 <?php
 
-
 namespace Kalimero\Casys\Http\Helper;
 
-
-use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class Casys
 {
+    private const REQUIRED_FIELDS = [
+        'AmountToPay',
+        'PayToMerchant',
+        'MerchantName',
+        'AmountCurrency',
+        'Details1',
+        'Details2',
+        'PaymentOKURL',
+        'PaymentFailURL',
+        'OriginalAmount',
+        'OriginalCurrency',
+    ];
 
     public function getCasysData($client, $amount): array
     {
-        $length = [];
-
-        $required = [
-            'AmountToPay' => (round($amount) > 0) ? (round($amount) * 100) : '',
+        $requiredData = [
+            'AmountToPay' => (int) round($amount) > 0 ? (int) round($amount) * 100 : null,
             'PayToMerchant' => config('casys.PayToMerchant'),
             'MerchantName' => config('casys.MerchantName'),
             'AmountCurrency' => config('casys.AmountCurrency'),
             'Details1' => Str::random(12),
-            'Details2' => 'Price '.round($amount).config('casys.AmountCurrency'),
+            'Details2' => 'Price ' . round($amount) . config('casys.AmountCurrency'),
             'PaymentOKURL' => config('casys.PaymentOKURL'),
             'PaymentFailURL' => config('casys.PaymentFailURL'),
-            'OriginalAmount' => round($amount),
+            'OriginalAmount' => (int) round($amount),
             'OriginalCurrency' => config('casys.AmountCurrency'),
         ];
 
-        try {
-            $this->validation($required);
-        } catch (Exception $exception) {
-        }
+        $this->validateRequiredData($requiredData);
 
-        $user = [
+        $userData = [
             'FirstName' => $client->name,
             'LastName' => $client->last_name,
             'Country' => $client->country,
             'Email' => $client->email,
         ];
-        try {
-            $this->validationUser($user);
-        } catch (Exception $exception) {
+
+        $this->validateUserData($userData);
+
+        $checkSumHeader = implode(',', array_merge(array_keys($requiredData), array_keys($userData)));
+        $checkSumHeaderLengths = implode('', array_merge(array_values($requiredData), array_values($userData)));
+        $checkSumHeaderParams = $checkSumHeaderLengths . md5(config('casys.Password'));
+
+        foreach ($requiredData as $value) {
+            $checkSumHeaderParams .= $value;
         }
 
-        // START Generate CheckSum
-        $checkSumHeader = count($required) + count($user);
-        foreach ($required as $key => $value) {
-            $checkSumHeader .= $key.',';
-        }
-        foreach ($user as $key => $value) {
-            $checkSumHeader .= $key.',';
-        }
-        foreach ($required as $key => $value) {
-            $checkSumHeader .= $length[$key];
-        }
-        foreach ($user as $key => $value) {
-            $checkSumHeader .= $length[$key];
-        }
-        $checkSumHeaderParams = $checkSumHeader;
-        foreach ($required as $key => $value) {
+        foreach ($userData as $value) {
             $checkSumHeaderParams .= $value;
         }
-        foreach ($user as $key => $value) {
-            $checkSumHeaderParams .= $value;
-        }
-        $checkSumHeaderParams .= md5(config('casys.Password'));
-        // END Generate CheckSum
 
         return [
             'checkSum' => $checkSumHeaderParams,
-            'required' => $required,
-            'user' => $user,
-            'checkSumHeader' => $checkSumHeader,
+            'required' => $requiredData,
+            'user' => $userData,
+            'checkSumHeader' => $checkSumHeader . $checkSumHeaderLengths,
         ];
     }
 
-    /**
-     * @param $required
-     * @return array
-     * @throws exception
-     */
-    public function validation($required): array
+    private function validateRequiredData($data): void
     {
-        return Validator::make($required, [
+        Validator::make($data, [
             'AmountToPay' => 'required|integer',
             'PayToMerchant' => 'required|integer',
             'MerchantName' => 'required|string|max:255',
@@ -93,23 +78,17 @@ class Casys
             'PaymentOKURL' => 'required|string|max:255',
             'PaymentFailURL' => 'required|string|max:255',
             'OriginalAmount' => 'required|integer',
-            'OriginalCurrency' => 'required|string|max:255'
+            'OriginalCurrency' => 'required|string|max:255',
         ])->validate();
     }
 
-    /**
-     * @param $user
-     * @return array
-     * @throws exception
-     */
-    public function validationUser($user): array
+    private function validateUserData($userData): void
     {
-        return Validator::make($user, [
+        Validator::make($userData, [
             'FirstName' => 'required|string|max:255',
             'LastName' => 'required|string|max:255',
             'Country' => 'required|string|max:255',
-            'Email' => 'required|email'
-
+            'Email' => 'required|email',
         ])->validate();
     }
 }
