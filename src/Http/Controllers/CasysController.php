@@ -6,7 +6,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Routing\Controller;
-use Kalimero\Casys\Http\Helper\Casys;
+use Kalimero\Casys\Http\Service\Casys;
 
 
 class CasysController extends Controller

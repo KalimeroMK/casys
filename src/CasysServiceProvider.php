@@ -3,6 +3,7 @@
 namespace Kalimero\Casys;
 
 use Illuminate\Support\ServiceProvider;
+use Kalimero\Casys\Http\Service\RecurringPayment;
 
 class CasysServiceProvider extends ServiceProvider
 {
@@ -22,7 +23,6 @@ class CasysServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/resources/views' => resource_path('views/vendor/casys'),
             __DIR__ . '/config/casys.php' => config_path('/casys.php'),
-            __DIR__ . '/routes/casys.php' => app_path('/../routes/casys.php'),
         ]);
     }
 
@@ -34,6 +34,9 @@ class CasysServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerConfig();
+        $this->app->bind(RecurringPayment::class, function () {
+            return new RecurringPayment();
+        });
 
     }
 

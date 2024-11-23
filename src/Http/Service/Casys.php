@@ -1,24 +1,12 @@
 <?php
 
-namespace Kalimero\Casys\Http\Helper;
+namespace Kalimero\Casys\Http\Service;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class Casys
 {
-    private const REQUIRED_FIELDS = [
-        'AmountToPay',
-        'PayToMerchant',
-        'MerchantName',
-        'AmountCurrency',
-        'Details1',
-        'Details2',
-        'PaymentOKURL',
-        'PaymentFailURL',
-        'OriginalAmount',
-        'OriginalCurrency',
-    ];
 
     public function getCasysData($client, $amount): array
     {

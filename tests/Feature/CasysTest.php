@@ -4,17 +4,11 @@ namespace Kalimero\Casys\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Kalimero\Casys\Http\Controllers\CasysController;
 use Orchestra\Testbench\TestCase;
 
 class CasysTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
 
     public function test_it_loads_the_casys_loader_view_on_index()
     {
