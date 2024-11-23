@@ -14,6 +14,7 @@ return [
     'AmountCurrency' => env('AMOUNT_CURRENCY', 'MKD'),
     'PaymentOKURL' => env('PAYMENT_OK_URL', 'paymentOKURL'),
     'PaymentFailURL' => env('PAYMENT_FAIL_URL', 'paymentFailURL'),
-    'Password' => env('CASYS_TOKEN', 'TEST_PASS')
+    'Password' => env('CASYS_TOKEN', 'TEST_PASS'),
+    'RecurrentPaymentWsdl' => env('RECURRING_PAYMENT_WSDL', 'https://www.cpay.com.mk/Recurring/RecurringPaymentsWS.wsdl'),
 
 ];

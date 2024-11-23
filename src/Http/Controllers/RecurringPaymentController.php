@@ -2,41 +2,44 @@
 
 namespace Kalimero\Casys\Http\Controllers;
 
-use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use Kalimero\Casys\Http\Requests\handleRecurringPaymentRequest;
-use Kalimero\Casys\Http\Service\RecurringPayment;
+use Kalimero\Casys\Http\Requests\HandleRecurringPaymentRequest;
+use Kalimero\Casys\Interfaces\RecurringPaymentInterface;
 
 class RecurringPaymentController extends Controller
 {
-    protected RecurringPayment $recurringPayment;
+    protected RecurringPaymentInterface $recurringPayment;
 
-    public function __construct(RecurringPayment $recurringPayment)
+    public function __construct(RecurringPaymentInterface $recurringPayment)
     {
         $this->recurringPayment = $recurringPayment;
     }
 
     /**
-     * Handle recurring payment request.
+     * Handle the recurring payment request.
+     *
+     * @param HandleRecurringPaymentRequest $request
+     * @return JsonResponse
      */
-    public function handleRecurringPayment(handleRecurringPaymentRequest $request)
+    public function handleRecurringPayment(HandleRecurringPaymentRequest $request): JsonResponse
     {
-        try {
-            $validated = $request->validated();
-            $response = $this->recurringPayment->sendPayment(
-                $validated['merchant_id'],
-                $validated['rp_ref'],
-                $validated['rp_ref_id'],
-                $validated['amount'],
-                $validated['password']
-            );
+        $validated = $request->validate([
+            'merchant_id' => 'required|string',
+            'rp_ref' => 'required|string',
+            'rp_ref_id' => 'required|string',
+            'amount' => 'required|integer',
+            'password' => 'required|string',
+        ]);
 
-            return response()->json($response);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'error' => $e->getMessage(),
-            ]);
-        }
+        $response = $this->recurringPayment->sendPayment(
+            $validated['merchant_id'],
+            $validated['rp_ref'],
+            $validated['rp_ref_id'],
+            $validated['amount'],
+            $validated['password']
+        );
+
+        return response()->json($response);
     }
 }

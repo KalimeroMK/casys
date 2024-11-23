@@ -1,14 +1,20 @@
 <?php
 
-namespace Kalimero\Casys\Http\Service;
+namespace Kalimero\Casys\Service;
 
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use stdClass;
 
 class Casys
 {
-
-    public function getCasysData($client, $amount): array
+    /**
+     * Generate Casys data for payment processing.
+     *
+     * @param stdClass $client An object containing client data (name, last_name, country, email).
+     * @param float $amount The amount to be paid.
+     * @return array{checkSum: string, required: array<string, mixed>, user: array<string, mixed>, checkSumHeader: string}
+     */
+    public function getCasysData(stdClass $client, float $amount): array
     {
         $requiredData = [
             'AmountToPay' => (int) round($amount) > 0 ? (int) round($amount) * 100 : null,
@@ -23,16 +29,12 @@ class Casys
             'OriginalCurrency' => config('casys.AmountCurrency'),
         ];
 
-        $this->validateRequiredData($requiredData);
-
         $userData = [
             'FirstName' => $client->name,
             'LastName' => $client->last_name,
             'Country' => $client->country,
             'Email' => $client->email,
         ];
-
-        $this->validateUserData($userData);
 
         $checkSumHeader = implode(',', array_merge(array_keys($requiredData), array_keys($userData)));
         $checkSumHeaderLengths = implode('', array_merge(array_values($requiredData), array_values($userData)));
@@ -52,31 +54,5 @@ class Casys
             'user' => $userData,
             'checkSumHeader' => $checkSumHeader . $checkSumHeaderLengths,
         ];
-    }
-
-    private function validateRequiredData($data): void
-    {
-        Validator::make($data, [
-            'AmountToPay' => 'required|integer',
-            'PayToMerchant' => 'required|integer',
-            'MerchantName' => 'required|string|max:255',
-            'AmountCurrency' => 'required|string|max:255',
-            'Details1' => 'required|integer',
-            'Details2' => 'required|string|max:255',
-            'PaymentOKURL' => 'required|string|max:255',
-            'PaymentFailURL' => 'required|string|max:255',
-            'OriginalAmount' => 'required|integer',
-            'OriginalCurrency' => 'required|string|max:255',
-        ])->validate();
-    }
-
-    private function validateUserData($userData): void
-    {
-        Validator::make($userData, [
-            'FirstName' => 'required|string|max:255',
-            'LastName' => 'required|string|max:255',
-            'Country' => 'required|string|max:255',
-            'Email' => 'required|email',
-        ])->validate();
     }
 }
