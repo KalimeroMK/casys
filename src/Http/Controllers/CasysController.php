@@ -8,18 +8,23 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Routing\Controller;
 use Kalimero\Casys\Http\Service\Casys;
 
-
 class CasysController extends Controller
 {
+    protected Casys $casys;
 
-    private Casys $casys;
-
-    public function __construct()
+    /**
+     * Inject the Casys service.
+     *
+     * @param Casys $casys
+     */
+    public function __construct(Casys $casys)
     {
-        $this->casys = new Casys();
+        $this->casys = $casys;
     }
 
     /**
+     * Display the payment loader view.
+     *
      * @return Application|Factory|View
      */
     public function index()
@@ -28,36 +33,35 @@ class CasysController extends Controller
     }
 
     /**
+     * Generate and display the payment data.
+     *
      * @param $client
      * @param $amount
      * @return Application|Factory|View
      */
-    protected function getCasys($client, $amount)
+    public function getCasys($client, $amount)
     {
-        $casys = $this->getCasysData($client, $amount);
-        return view('casys::index', compact('casys'));
+        $casysData = $this->casys->getCasysData($client, $amount);
+        return view('casys::index', compact('casysData'));
     }
 
-    /** paymentOKURL
+    /**
+     * Handle successful payment.
      *
      * @return Application|Factory|View
      */
     public function success()
     {
-        return view('casys::okurl')->with('success', 'You transaction was successful');
+        return view('casys::okurl')->with('success', 'Your transaction was successful');
     }
 
-    /** paymentFailURL
+    /**
+     * Handle failed payment.
+     *
      * @return Application|Factory|View
      */
     public function fail()
     {
-        return view('casys::failurl')->with('success', 'You transaction was successful');
+        return view('casys::failurl')->with('error', 'Your transaction failed');
     }
-
-    protected function getCasysData($client, $amount): array
-    {
-        return $this->casys->getCasysData($client, $amount);
-    }
-
 }
