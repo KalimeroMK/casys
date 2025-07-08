@@ -10,7 +10,7 @@ class CasysTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    public function test_it_loads_the_casys_loader_view_on_index()
+    public function test_it_loads_the_casys_loader_view_on_index(): void
     {
         $response = $this->get(route('casys.index'));
 
@@ -18,7 +18,7 @@ class CasysTest extends TestCase
         $response->assertViewIs('casys::loader');
     }
 
-    public function test_it_returns_casys_data_on_getCasys()
+    public function test_it_returns_casys_data_on_getCasys(): void
     {
         $client = $this->faker->word;
         $amount = $this->faker->randomNumber(2);
@@ -30,7 +30,7 @@ class CasysTest extends TestCase
         $response->assertViewHas('casys');
     }
 
-    public function test_it_returns_success_view_on_success()
+    public function test_it_returns_success_view_on_success(): void
     {
         $response = $this->get(route('casys.success'));
 
@@ -39,7 +39,7 @@ class CasysTest extends TestCase
         $response->assertViewHas('success', 'You transaction was successful');
     }
 
-    public function test_it_returns_fail_view_on_fail()
+    public function test_it_returns_fail_view_on_fail(): void
     {
         $response = $this->get(route('casys.fail'));
 

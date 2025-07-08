@@ -12,8 +12,6 @@ class CasysServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application events.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -22,24 +20,21 @@ class CasysServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/resources/views' => resource_path('views/vendor/casys'),
-            __DIR__ . '/config/casys.php' => config_path('casys.php'),
         ]);
     }
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {
         $this->registerConfig();
 
-        $this->app->singleton(RecurringPaymentInterface::class, function ($app) {
+        $this->app->singleton(RecurringPaymentInterface::class, function (): RecurringPayment {
             $wsdl = config('casys.RecurrentPaymentWsdl');
 
             // Ensure the WSDL is valid
-            if (!is_string($wsdl) || empty($wsdl)) {
+            if (!is_string($wsdl) || ($wsdl === '' || $wsdl === '0')) {
                 throw new InvalidArgumentException('The WSDL URL for the Recurrent Payment service must be a valid non-empty string.');
             }
 
@@ -51,8 +46,6 @@ class CasysServiceProvider extends ServiceProvider
 
     /**
      * Register package config.
-     *
-     * @return void
      */
     protected function registerConfig(): void
     {

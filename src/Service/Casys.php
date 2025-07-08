@@ -22,7 +22,7 @@ class Casys
             'MerchantName' => config('casys.MerchantName'),
             'AmountCurrency' => config('casys.AmountCurrency'),
             'Details1' => Str::random(12),
-            'Details2' => 'Price ' . round($amount) . config('casys.AmountCurrency'),
+            'Details2' => 'Price ' . round($amount) . (is_string(config('casys.AmountCurrency')) ? config('casys.AmountCurrency') : ''),
             'PaymentOKURL' => config('casys.PaymentOKURL'),
             'PaymentFailURL' => config('casys.PaymentFailURL'),
             'OriginalAmount' => (int) round($amount),
@@ -38,14 +38,16 @@ class Casys
 
         $checkSumHeader = implode(',', array_merge(array_keys($requiredData), array_keys($userData)));
         $checkSumHeaderLengths = implode('', array_merge(array_values($requiredData), array_values($userData)));
-        $checkSumHeaderParams = $checkSumHeaderLengths . md5(config('casys.Password'));
+        $password = config('casys.Password');
+        $passwordString = is_string($password) ? $password : '';
+        $checkSumHeaderParams = $checkSumHeaderLengths . md5($passwordString);
 
         foreach ($requiredData as $value) {
-            $checkSumHeaderParams .= $value;
+            $checkSumHeaderParams .= is_null($value) ? '' : (is_scalar($value) ? (string)$value : '');
         }
 
         foreach ($userData as $value) {
-            $checkSumHeaderParams .= $value;
+            $checkSumHeaderParams .= is_null($value) ? '' : (is_scalar($value) ? (string)$value : '');
         }
 
         return [

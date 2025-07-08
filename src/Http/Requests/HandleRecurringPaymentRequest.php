@@ -24,8 +24,6 @@ class HandleRecurringPaymentRequest extends FormRequest
 
     /**
      * Authorize the request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {

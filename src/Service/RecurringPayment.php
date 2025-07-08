@@ -8,15 +8,10 @@ use Kalimero\Casys\Interfaces\RecurringPaymentInterface;
 
 class RecurringPayment implements RecurringPaymentInterface
 {
-    /**
-     * @var SoapClient
-     */
     private SoapClient $soapClient;
 
     /**
      * RecurringPayment constructor.
-     *
-     * @param SoapClient $soapClient
      */
     public function __construct(SoapClient $soapClient)
     {
@@ -26,11 +21,6 @@ class RecurringPayment implements RecurringPaymentInterface
     /**
      * Perform a recurring payment.
      *
-     * @param string $merchantID
-     * @param string $rpRef
-     * @param string $rpRefID
-     * @param int $amount
-     * @param string $password
      * @return array{success: bool, payment_reference?: string, error_description?: string}
      * @throws Exception
      */
@@ -48,9 +38,19 @@ class RecurringPayment implements RecurringPaymentInterface
             $response = $this->soapClient->__soapCall('sendPayment', [$params]);
 
             if (is_object($response) && isset($response->Success)) {
+                $paymentReference = '';
+                if (isset($response->CPayPaymentRef)) {
+                    $paymentReference = is_string($response->CPayPaymentRef) ? $response->CPayPaymentRef : '';
+                }
+
+                $errorDescription = 'Unknown error';
+                if (isset($response->ErrorDecription)) {
+                    $errorDescription = is_string($response->ErrorDecription) ? $response->ErrorDecription : 'Unknown error';
+                }
+
                 return $response->Success
-                    ? ['success' => true, 'payment_reference' => $response->CPayPaymentRef ?? null]
-                    : ['success' => false, 'error_description' => $response->ErrorDecription ?? 'Unknown error'];
+                    ? ['success' => true, 'payment_reference' => $paymentReference]
+                    : ['success' => false, 'error_description' => $errorDescription];
             }
 
             return ['success' => false, 'error_description' => 'Invalid response format from SOAP service'];

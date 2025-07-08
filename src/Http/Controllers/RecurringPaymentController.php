@@ -18,26 +18,23 @@ class RecurringPaymentController extends Controller
 
     /**
      * Handle the recurring payment request.
-     *
-     * @param HandleRecurringPaymentRequest $request
-     * @return JsonResponse
      */
     public function handleRecurringPayment(HandleRecurringPaymentRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'merchant_id' => 'required|string',
-            'rp_ref' => 'required|string',
-            'rp_ref_id' => 'required|string',
-            'amount' => 'required|integer',
-            'password' => 'required|string',
-        ]);
+        $validated = $request->validated();
+
+        $merchantId = is_string($validated['merchant_id']) ? $validated['merchant_id'] : '';
+        $rpRef = is_string($validated['rp_ref']) ? $validated['rp_ref'] : '';
+        $rpRefId = is_string($validated['rp_ref_id']) ? $validated['rp_ref_id'] : '';
+        $amount = is_int($validated['amount']) ? $validated['amount'] : 0;
+        $password = is_string($validated['password']) ? $validated['password'] : '';
 
         $response = $this->recurringPayment->sendPayment(
-            $validated['merchant_id'],
-            $validated['rp_ref'],
-            $validated['rp_ref_id'],
-            $validated['amount'],
-            $validated['password']
+            $merchantId,
+            $rpRef,
+            $rpRefId,
+            $amount,
+            $password
         );
 
         return response()->json($response);

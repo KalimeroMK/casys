@@ -15,8 +15,6 @@ class CasysController extends Controller
 
     /**
      * Inject the Casys service.
-     *
-     * @param Casys $casys
      */
     public function __construct(Casys $casys)
     {
@@ -25,12 +23,12 @@ class CasysController extends Controller
 
     /**
      * Display the payment loader view.
-     *
-     * @return Application|Factory|View
      */
     public function index(): View|Factory|Application
     {
-        return view('casys::loader');
+        /** @var view-string $viewName */
+        $viewName = 'casys::loader';
+        return view($viewName);
     }
 
     /**
@@ -38,31 +36,32 @@ class CasysController extends Controller
      *
      * @param stdClass $client An object containing client data (name, last_name, country, email).
      * @param float $amount The amount to be paid.
-     * @return Application|Factory|View
      */
     public function getCasys(stdClass $client, float $amount): View|Factory|Application
     {
         $casysData = $this->casys->getCasysData($client, $amount);
-        return view('casys::index', compact('casysData'));
+        /** @var view-string $viewName */
+        $viewName = 'casys::index';
+        return view($viewName, ['casysData' => $casysData]);
     }
 
     /**
      * Handle successful payment.
-     *
-     * @return Application|Factory|View
      */
     public function success(): View|Factory|Application
     {
-        return view('casys::okurl')->with('success', 'Your transaction was successful');
+        /** @var view-string $viewName */
+        $viewName = 'casys::okurl';
+        return view($viewName)->with('success', 'Your transaction was successful');
     }
 
     /**
      * Handle failed payment.
-     *
-     * @return Application|Factory|View
      */
     public function fail(): View|Factory|Application
     {
-        return view('casys::failurl')->with('error', 'Your transaction failed');
+        /** @var view-string $viewName */
+        $viewName = 'casys::failurl';
+        return view($viewName)->with('error', 'Your transaction failed');
     }
 }

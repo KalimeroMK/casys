@@ -6,6 +6,9 @@ parameters:
 
     paths:
         - src/
+        - config/
+    # Level 10 is the highest level
+    level: 10
 
-    # Level 9 is the highest level
-    level: 9
+    ignoreErrors:
+        - '#Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''.#'
