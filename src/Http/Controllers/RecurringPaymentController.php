@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kalimero\Casys\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
@@ -26,7 +28,8 @@ class RecurringPaymentController extends Controller
         $merchantId = is_string($validated['merchant_id']) ? $validated['merchant_id'] : '';
         $rpRef = is_string($validated['rp_ref']) ? $validated['rp_ref'] : '';
         $rpRefId = is_string($validated['rp_ref_id']) ? $validated['rp_ref_id'] : '';
-        $amount = is_int($validated['amount']) ? $validated['amount'] : 0;
+        $rawAmount = $validated['amount'];
+        $amount = is_numeric($rawAmount) ? (int) round((float) $rawAmount) : 0;
         $password = is_string($validated['password']) ? $validated['password'] : '';
 
         $response = $this->recurringPayment->sendPayment(

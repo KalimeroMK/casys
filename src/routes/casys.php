@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,7 +18,7 @@ use Kalimero\Casys\Http\Controllers\CasysController;
 use Kalimero\Casys\Http\Controllers\RecurringPaymentController;
 
 Route::get('paymentLoader', [CasysController::class, 'index'])->name('loader');
-Route::post('payment', [CasysController::class, 'getCasys'])->name('validateAndPay');
+Route::post('payment', [CasysController::class, 'pay'])->name('validateAndPay');
 Route::post('paymentOKURL', [CasysController::class, 'success'])->name('paymentOKURL');
 Route::post('paymentFailURL', [CasysController::class, 'fail'])->name('paymentFailURL');
 

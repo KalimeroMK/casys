@@ -1,0 +1,74 @@
+name: tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { php: '8.1', laravel: '10.*', testbench: '8.*' }
+          - { php: '8.2', laravel: '11.*', testbench: '9.*' }
+          - { php: '8.3', laravel: '12.*', testbench: '10.*' }
+          - { php: '8.4', laravel: '12.*', testbench: '10.*' }
+          - { php: '8.3', laravel: '13.*', testbench: '11.*' }
+          - { php: '8.4', laravel: '13.*', testbench: '11.*' }
+
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: json, soap
+          coverage: none
+
+      # Laravel 10 and 11 are past their security-support window, so every release carries
+      # an advisory and Composer refuses to install it. Lifted in this throwaway test
+      # container only - deliberately not set in composer.json.
+      - name: Allow installing end-of-life framework releases
+        if: matrix.laravel == '10.*' || matrix.laravel == '11.*'
+        run: composer config audit.block-insecure false
+
+      # larastan and rector are only used by the static-analysis job. On PHP 8.1 they
+      # cannot co-exist: larastan 3 needs PHP 8.2, and larastan 2 pins phpstan 1 while
+      # rector 2 needs phpstan 2.
+      - name: Install dependencies
+        run: |
+          composer remove --dev --no-update --no-interaction larastan/larastan rector/rector
+          composer require --no-update --no-interaction "laravel/framework:${{ matrix.laravel }}"
+          composer require --no-update --no-interaction --dev "orchestra/testbench:${{ matrix.testbench }}"
+          composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Run tests
+        run: vendor/bin/phpunit
+
+  static:
+    runs-on: ubuntu-latest
+    name: static analysis
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: json, soap
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse --no-progress
+
+      - name: Rector
+        run: vendor/bin/rector process --dry-run

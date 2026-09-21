@@ -45,17 +45,29 @@ Register the route file in your `RouteServiceProvider` or add the following rout
 
 ### Standard Payment Routes
 ```php
-use App\Http\Controllers\CasysController;
+use Kalimero\Casys\Http\Controllers\CasysController;
 
 Route::get('paymentLoader', [CasysController::class, 'index'])->name('loader');
-Route::post('payment', [CasysController::class, 'getCasys'])->name('validateAndPay');
+Route::post('payment', [CasysController::class, 'pay'])->name('validateAndPay');
 Route::post('paymentOKURL', [CasysController::class, 'success'])->name('paymentOKURL');
 Route::post('paymentFailURL', [CasysController::class, 'fail'])->name('paymentFailURL');
 ```
 
+### Posting a payment
+
+The `validateAndPay` route validates the buyer details and renders the payment form:
+
+```
+POST /payment
+name=Ana&last_name=Petrova&country=MK&email=ana@example.com&amount=100
+```
+
+To build the payload from your own controller instead, call
+`CasysController::getCasys(stdClass $client, float $amount)` directly.
+
 ### Recurring Payment Routes
 ```php
-use KalimeroMK\Casys\Controllers\RecurringPaymentController;
+use Kalimero\Casys\Http\Controllers\RecurringPaymentController;
 
 Route::post('/recurring-payment', [RecurringPaymentController::class, 'handleRecurringPayment'])->name('recurring.payment');
 ```
@@ -63,7 +75,7 @@ Route::post('/recurring-payment', [RecurringPaymentController::class, 'handleRec
 For Laravel <=7, use the controller string syntax:
 ```php
 Route::get('paymentLoader', 'CasysController@index')->name('loader');
-Route::post('payment', 'CasysController@getCasys')->name('validateAndPay');
+Route::post('payment', 'CasysController@pay')->name('validateAndPay');
 Route::post('paymentOKURL', 'CasysController@success')->name('paymentOKURL');
 Route::post('paymentFailURL', 'CasysController@fail')->name('paymentFailURL');
 ```
