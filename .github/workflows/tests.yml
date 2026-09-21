@@ -38,8 +38,12 @@ jobs:
         if: matrix.laravel == '10.*' || matrix.laravel == '11.*'
         run: composer config audit.block-insecure false
 
+      # larastan and rector are only used by the static-analysis job. On PHP 8.1 they
+      # cannot co-exist: larastan 3 needs PHP 8.2, and larastan 2 pins phpstan 1 while
+      # rector 2 needs phpstan 2.
       - name: Install dependencies
         run: |
+          composer remove --dev --no-update --no-interaction larastan/larastan rector/rector
           composer require --no-update --no-interaction "laravel/framework:${{ matrix.laravel }}"
           composer require --no-update --no-interaction --dev "orchestra/testbench:${{ matrix.testbench }}"
           composer update --prefer-dist --no-interaction --no-progress
