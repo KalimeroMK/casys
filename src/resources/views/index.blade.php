@@ -44,7 +44,7 @@
 @push('scripts')
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            ('#cPayForm').delay(5000).submit();
+            setTimeout(() => document.getElementById('cPayForm').submit(), 5000);
         })
     </script>
 @endpush

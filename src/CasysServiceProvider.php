@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kalimero\Casys;
 
 use Illuminate\Support\ServiceProvider;

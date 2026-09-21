@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kalimero\Casys\Service;
 
 use Illuminate\Support\Str;
@@ -37,7 +39,11 @@ class Casys
         ];
 
         $checkSumHeader = implode(',', array_merge(array_keys($requiredData), array_keys($userData)));
-        $checkSumHeaderLengths = implode('', array_merge(array_values($requiredData), array_values($userData)));
+        $allValues = array_map(
+            static fn (mixed $value): string => is_scalar($value) ? (string) $value : '',
+            array_merge(array_values($requiredData), array_values($userData)),
+        );
+        $checkSumHeaderLengths = implode('', $allValues);
         $password = config('casys.Password');
         $passwordString = is_string($password) ? $password : '';
         $checkSumHeaderParams = $checkSumHeaderLengths . md5($passwordString);
